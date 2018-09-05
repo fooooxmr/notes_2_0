@@ -18,6 +18,9 @@ gem 'omniauth-google-oauth2'
 
 
 
+gem 'slim'
+gem 'bootstrap'
+gem 'jquery-rails'
 gem 'bootsnap', '>= 1.1.0', require: false
 
 group :development, :test do
