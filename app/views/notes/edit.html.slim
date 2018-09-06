@@ -1,0 +1,6 @@
+= simple_form_for(@note, html: {class: 'form-group'}) do |f|
+  = f.input :title
+  = f.input :description
+  - unless @note.exported?
+    = f.input :status, collection: [Note::STATE_DRAFT, Note::STATE_READY_FOR_EXPORT], include_blank: false
+  = f.submit class: 'btn btn-primary'

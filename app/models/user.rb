@@ -2,6 +2,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :omniauthable, omniauth_providers: [:google_oauth2]
 
+  has_many :notes
+
   validates :email, uniqueness: true, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :password, presence: true,
                       confirmation: true,

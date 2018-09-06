@@ -1,0 +1,13 @@
+.text-center
+  .alert.alert-warning
+
+    h1
+      = @note.title
+    hr
+    = @note.description
+    h4
+      .label.label-info.col-lg-1
+        = @note.status.humanize
+
+.btn.btn-default
+    = link_to 'Edit', edit_note_path

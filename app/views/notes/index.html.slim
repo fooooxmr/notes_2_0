@@ -1,0 +1,18 @@
+table.table.table-striped.table-bordered.table-hover.table-condensed
+  thead
+    tr
+      th Title
+      th Status
+      th Date created
+      th Date updated
+  tbody
+    - @notes.each do |note|
+      tr
+        td.col-md-4
+          = link_to note.title, note_path(note)
+        td.col-md-1
+          = note.status
+        td.col-md-4
+          = note.created_at
+        td.col-md-4
+          = note.updated_at

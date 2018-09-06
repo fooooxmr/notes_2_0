@@ -1,0 +1,19 @@
+.navbar.navbar-inverse
+  .container-fluid
+    nav.navbar-brand
+      = link_to 'Notes', notes_path
+    ul.nav.navbar-nav
+      li
+        = link_to 'Create note', new_note_path
+    ul.nav.navbar-nav.navbar-right
+      - if user_signed_in?
+        .navbar-text
+          span.glyphicon.glyphicon-user
+          = "Signed in as #{current_user.email}"
+        li
+          = link_to 'Sign out', destroy_user_session_path, method: :delete
+      - else
+        span.glyphicon.glyphicon-log-in
+        li
+          = link_to 'Sign in', new_user_session_path
+

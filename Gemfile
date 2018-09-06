@@ -16,11 +16,13 @@ gem 'figaro'
 gem 'devise'
 gem 'omniauth-google-oauth2'
 
-
+gem 'aasm'
 
 gem 'slim'
 gem 'bootstrap'
+gem 'twitter-bootstrap-rails'
 gem 'jquery-rails'
+gem 'simple_form'
 gem 'bootsnap', '>= 1.1.0', require: false
 
 group :development, :test do
