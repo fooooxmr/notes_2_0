@@ -1,3 +1,4 @@
+= link_to 'Export', export_index_path(notes: @notes.to_json), method: :post
 table.table.table-striped.table-bordered.table-hover.table-condensed
   thead
     tr
@@ -6,13 +7,14 @@ table.table.table-striped.table-bordered.table-hover.table-condensed
       th Date created
       th Date updated
   tbody
-    - @notes.each do |note|
-      tr
-        td.col-md-4
-          = link_to note.title, note_path(note)
-        td.col-md-1
-          = note.status
-        td.col-md-4
-          = note.created_at
-        td.col-md-4
-          = note.updated_at
+    - unless @notes.empty?
+      - @notes.each do |note|
+        tr
+          td.col-md-4
+            = link_to note.title, note_path(note.id)
+          td.col-md-1
+            = note.status
+          td.col-md-4
+            = note.created_at
+          td.col-md-4
+            = note.updated_at

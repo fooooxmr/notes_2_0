@@ -5,6 +5,16 @@
     ul.nav.navbar-nav
       li
         = link_to 'Create note', new_note_path
+    .navbar-form.navbar-left
+      = form_tag notes_path, class: 'form-group', method: :get
+        = text_field_tag :search, params[:search], class: 'form-control', placeholder: 'Search'
+        .label
+          = 'Sort by'
+        = select_tag :sort, options_for_select(Note::SORT_FIELDS.map(&:humanize), params[:sort]), class: 'form-control btn'
+        .label
+          = 'Filter'
+          = select_tag :status, options_for_select(Note.statuses.map(&:humanize), params[:status]), class: 'form-control btn'
+        = submit_tag 'Search',name: nil, class: 'btn btn-default'
     ul.nav.navbar-nav.navbar-right
       - if user_signed_in?
         .navbar-text

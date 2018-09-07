@@ -2,7 +2,12 @@ class NotesController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @notes = current_user.notes
+    search_type = params[:search].present? ? 'must' : 'should'
+    @notes = if params[:search].present? || params[:status].present?
+      Note.search_notes(underscore(params[:search]), underscore(params[:status]), current_user,search_type).records
+    else
+      current_user.notes
+    end.order(underscore(params[:sort]))
   end
 
   def show
@@ -36,6 +41,10 @@ class NotesController < ApplicationController
   end
 
   private
+
+  def underscore(str)
+    str&.parameterize&.underscore
+  end
 
   def permited_params
     params.require(:note).permit(:title, :description, :status)

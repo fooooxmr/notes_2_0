@@ -4,4 +4,6 @@ Rails.application.routes.draw do
   root 'notes#index'
 
   resources :notes
+
+  resources :export, only: :create, defaults: { format: :csv }
 end

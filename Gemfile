@@ -15,8 +15,11 @@ gem 'figaro'
 
 gem 'devise'
 gem 'omniauth-google-oauth2'
+gem 'elasticsearch-model', github: 'elastic/elasticsearch-rails', branch: '5.x'
+gem 'elasticsearch-rails', github: 'elastic/elasticsearch-rails', branch: '5.x'
 
 gem 'aasm'
+gem 'lp_csv_exportable'
 
 gem 'slim'
 gem 'bootstrap'
