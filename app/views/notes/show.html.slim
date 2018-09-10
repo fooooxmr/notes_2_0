@@ -1,6 +1,5 @@
 .text-center
   .alert.alert-warning
-
     h1
       = @note.title
     hr
@@ -10,4 +9,6 @@
         = @note.status.humanize
 
 .btn.btn-default
-    = link_to 'Edit', edit_note_path
+  = link_to 'Edit', edit_note_path
+.btn.btn-danger
+  = link_to 'Delete', note_path(@note), method: :delete, data: {confirm: 'Are you sure?'}

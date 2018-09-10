@@ -1,4 +1,6 @@
-= link_to 'Export', export_index_path(notes: @notes.to_json), method: :post
+= form_tag export_index_path, method: :post
+  = hidden_field_tag :notes, @notes.ready_for_export.map(&:id)
+  = submit_tag 'Export'
 table.table.table-striped.table-bordered.table-hover.table-condensed
   thead
     tr

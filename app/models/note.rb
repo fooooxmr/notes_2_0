@@ -7,16 +7,20 @@ class Note < ApplicationRecord
 
   belongs_to :user
 
+  scope :ready_for_export, ->{ where(status: :ready_for_export) }
+
   validates :title, presence: true, length: {in: 2..20}
 
-  settings dynamic: false do
-    mappings dynamic: 'true' do
-      indexes :title, type: 'string'
-      indexes :description, type: 'string'
-      indexes :status, type: 'string'
+  settings do
+    mappings dynamic: true do
+      indexes :title, type: :string
+      indexes :description, type: :string
+      indexes :status, type: :string
+      indexes :updated_at, type: :date
+      indexes :created_at, type: :date
+      indexes :user_id, type: :integer
     end
   end
-
 
   aasm column: :status do
     state :draft, initial: true
@@ -32,7 +36,7 @@ class Note < ApplicationRecord
     end
 
     event :export do
-      transitions from: [:ready_for_export], to: :export
+      transitions from: [:ready_for_export], to: :exported
     end
   end
 
@@ -40,7 +44,26 @@ class Note < ApplicationRecord
     self.aasm.states.map(&:to_s)
   end
 
-  def self.search_notes(query, status, user, search_type)
+  def self.to_export(notes_ids, current_user)
+    notes_ids.split.map do |note_id|
+      note = find_by(id: note_id, user_id: current_user.id)
+      note.export!
+      note
+    end.compact
+  end
+
+  def as_indexed_json(options = nil)
+    {
+        'title' => title,
+        'description' => description,
+        'status' => status,
+        'created_at' => created_at,
+        'updated_at' => updated_at,
+        'user_id' => user_id
+    }
+  end
+
+  def self.search_notes(query, status, order_field, user, search_type)
     search({
                query: {
                    bool: {
@@ -50,19 +73,16 @@ class Note < ApplicationRecord
                                    query: query,
                                    fields: [:title, :description]
                                }
-                           },
-                           {
-                               match: {
-                                   user_id: user.id
-                               }
                            }],
-                       filter: {
-                           term: {
-                               status: status
-                           }
-                       }
+                       filter: [{
+                          term: {user_id: user.id},
+                          term: {status: status}
+                       }]
                    }
-               }
+               },
+               sort: [{
+                  order_field => {order: :desc}
+               }]
            })
   end
 end

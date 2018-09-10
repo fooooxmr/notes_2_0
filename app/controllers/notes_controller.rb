@@ -1,13 +1,15 @@
 class NotesController < ApplicationController
-  before_action :authenticate_user!
-
   def index
     search_type = params[:search].present? ? 'must' : 'should'
     @notes = if params[:search].present? || params[:status].present?
-      Note.search_notes(underscore(params[:search]), underscore(params[:status]), current_user,search_type).records
-    else
-      current_user.notes
-    end.order(underscore(params[:sort]))
+               Note.search_notes(underscore(params[:search]),
+                                 underscore(params[:status]),
+                                 underscore(params[:sort]),
+                                 current_user,
+                                 search_type).records
+             else
+               current_user.notes
+    end
   end
 
   def show
@@ -20,11 +22,16 @@ class NotesController < ApplicationController
 
   def update
     @note = current_user.notes.find(params[:id])
-    if @note.update(permited_params)
+    if @note.update(permited_params.merge(updated_at: Time.now))
       redirect_to note_path(@note)
     else
       render :edit
     end
+  end
+
+  def destroy
+    Note.find(params[:id]).delete
+    redirect_to notes_path
   end
 
   def new
