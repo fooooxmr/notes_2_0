@@ -44,7 +44,7 @@ class Note < ApplicationRecord
     search({
                query: {
                    bool: {
-                       "#{search_type}": [
+                       search_type => [
                            {
                                multi_match: {
                                    query: query,
